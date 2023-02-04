@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 [System.Serializable]
 public class DepthData
@@ -20,7 +21,8 @@ public class GridGenerator : MonoBehaviour
     [Header("Settings")]
     [SerializeField] int _gridWidth = 10;
     [SerializeField] int _gridHeight = 15;
-    [SerializeField] float _ironChance = 0.25f;
+    [SerializeField] Vector2 _gridSize = new Vector2(10, 15);
+    [SerializeField, PropertyRange(0, 1)] float _dirtChance = 0.67f;
     [SerializeField] List<DepthData> _depthLevels = new List<DepthData>();
 
     [Header("Transforms")]
@@ -61,9 +63,8 @@ public class GridGenerator : MonoBehaviour
     {
         float chance = Random.Range(0f, 1f);
 
-        if (chance > 0.5f)
+        if (chance <= _dirtChance)
         {
-            // 50% chance always to just be dirt
             return _standardCell;
         }
 
@@ -113,5 +114,7 @@ public class GridGenerator : MonoBehaviour
                 cell.transform.position = pos;
             }
         }
+
+        Debug.Log("Generated grid");
     }
 }

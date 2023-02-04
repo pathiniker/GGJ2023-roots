@@ -18,4 +18,9 @@ public class GameController : MonoBehaviour
             return;
         }
     }
+
+    private void Start()
+    {
+        Debug.Log("Start!");
+    }
 }

@@ -16,5 +16,21 @@ public class GridCell : MonoBehaviour
 {
     [SerializeField] CellData _cellData;
 
+    public float Health { get; private set; }
+
     public CellData Data { get { return _cellData; } }
+
+    private void OnEnable()
+    {
+        Health = _cellData.StartingHealth;
+    }
+
+    public void DealDamage(int amount)
+    {
+        amount = Mathf.Abs(amount);
+        Health -= amount;
+
+        if (Health <= 0)
+            Destroy(gameObject);
+    }
 }
