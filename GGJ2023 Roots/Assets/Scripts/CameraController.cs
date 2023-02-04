@@ -16,11 +16,6 @@ public class CameraController : MonoBehaviour
         return _followObject.transform.position + _cameraOffset;
     }
 
-    private void FixedUpdate()
-    {
-        //_camera.transform.position = GetFollowPosition();
-    }
-
     private void Update()
     {
         _camera.transform.position = GetFollowPosition();
