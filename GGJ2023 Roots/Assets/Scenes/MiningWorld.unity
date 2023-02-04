@@ -169,11 +169,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridWidth: 25
   _gridHeight: 100
+  _ironChance: 0.25
+  _depthLevels:
+  - Level: 0
+    DepthY: 0
+  - Level: 1
+    DepthY: -1
+  - Level: 2
+    DepthY: -5
+  - Level: 3
+    DepthY: -10
+  - Level: 4
+    DepthY: -15
+  - Level: 5
+    DepthY: -20
   _gridParent: {fileID: 223097623}
   _standardCell: {fileID: 6609529105569108480, guid: 987216e49a4c2354fb0926ae586e71cc,
     type: 3}
   _ironCell: {fileID: 6609529105569108480, guid: f9deb4a906ffcf1409fe417758bb73a0,
     type: 3}
+  _oreCells:
+  - {fileID: 6609529105569108480, guid: 987216e49a4c2354fb0926ae586e71cc, type: 3}
+  - {fileID: 6609529105569108480, guid: f9deb4a906ffcf1409fe417758bb73a0, type: 3}
+  - {fileID: 6609529105569108480, guid: 9eb9b259a5c54024a9aacab2c4b56b10, type: 3}
+  - {fileID: 6609529105569108480, guid: 833e64b9cfd78db479725298650e3e3c, type: 3}
+  - {fileID: 6609529105569108480, guid: 0df9f63c1865fc540ae9a450dd6ee91f, type: 3}
 --- !u!1 &296411748
 GameObject:
   m_ObjectHideFlags: 0

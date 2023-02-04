@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour
     private void Start()
     {
         _distanceToGround = _collider.bounds.extents.y;
+        _rb.useGravity = true;
     }
 
     bool KeyIsPressed(KeyCode key)

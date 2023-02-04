@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6609529105569108485}
   - component: {fileID: 6609529105569108484}
   m_Layer: 0
-  m_Name: Iron Grid Cell
+  m_Name: Copper Grid Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6beb635d3e60965449b3a739f1de430f, type: 2}
+  - {fileID: 2100000, guid: bcf42b527ac53d04e9cb689b70a02e8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

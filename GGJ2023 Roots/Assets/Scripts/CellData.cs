@@ -6,4 +6,5 @@ using UnityEngine;
 public class CellData
 {
     public float SpawnChance = 0f;
+    public DepthLevel SpawnLevel;
 }
