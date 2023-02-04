@@ -9,6 +9,7 @@ public class UiController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI _elevationText;
+    [SerializeField] UI_FuelGauge _fuelDisplay;
 
     private void Awake()
     {
@@ -26,5 +27,10 @@ public class UiController : MonoBehaviour
     public void SetElevationText(float elevation)
     {
         _elevationText.SetText(elevation.ToString("0") + " ft");
+    }
+
+    public void SetFuelDisplay(float normalizedLevel)
+    {
+        _fuelDisplay.SetFuelLevelNormalized(normalizedLevel);
     }
 }

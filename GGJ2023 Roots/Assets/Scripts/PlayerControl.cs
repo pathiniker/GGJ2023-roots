@@ -42,8 +42,19 @@ public class PlayerControl : MonoBehaviour
         bool isGrounded = _mineMachine.IsGrounded();
         velocity.y = _rb.velocity.y;
         MineDirection direction = MineDirection.NONE;
-        UiController.Instance.SetElevationText(transform.position.y);
         float moveSpeed = _mineMachine.GetMoveSpeed();
+
+        float fuelToBurn = 0f;
+        float fuelBurnRate = _mineMachine.GetBurnFuelRate();
+        bool isBoosting = false;
+
+        float remainingFuel = _mineMachine.RemainingFuel;
+
+        if (remainingFuel <= 0f)
+        {
+            //Debug.Log("Out of fuel!");
+            return;
+        }
 
         if (KeyIsPressed(UP_KEY))
         {
@@ -51,20 +62,32 @@ public class PlayerControl : MonoBehaviour
             float forceStrength = _mineMachine.GetBoosterForce() * Time.deltaTime;
             Vector3 boostForce = new Vector3(0, Vector3.up.y * forceStrength, 0);
             velocity.y = boostForce.y;
+            isBoosting = true;
+            fuelToBurn = fuelBurnRate * 1.5f;
         } else if (KeyIsPressed(DOWN_KEY))
         {
             direction = MineDirection.Down;
+            fuelToBurn = fuelBurnRate;
         }
 
         if (KeyIsPressed(LEFT_KEY))
         {
             velocity += Vector3.left * moveSpeed * Time.deltaTime;
             direction = MineDirection.Left;
+
+            if (!isBoosting)
+                fuelToBurn = fuelBurnRate;
         } else if (KeyIsPressed(RIGHT_KEY))
         {
             velocity += Vector3.right * moveSpeed * Time.deltaTime;
             direction = MineDirection.Right;
+
+            if (!isBoosting)
+                fuelToBurn = fuelBurnRate;
         }
+
+        if (isBoosting || direction != MineDirection.NONE)
+            _mineMachine.BurnFuel(fuelToBurn);
 
         if (direction != MineDirection.NONE)
         {
@@ -75,5 +98,15 @@ public class PlayerControl : MonoBehaviour
         }
 
         _rb.velocity = velocity;
+
+        float elevation = transform.position.y;
+        UiController.Instance.SetElevationText(elevation);
+        if (elevation > 0f)
+        {
+            _mineMachine.Refuel();
+        } else
+        {
+            _mineMachine.StopRefuel();
+        }
     }
 }

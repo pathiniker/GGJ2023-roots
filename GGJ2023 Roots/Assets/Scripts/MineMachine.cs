@@ -10,10 +10,19 @@ public class MineMachine : MonoBehaviour
     [SerializeField] float _baseBoosterForce = 200f;
     [SerializeField] float _hitDelay = 0.2f;
     [SerializeField] float _baseMineStrength = 1f;
+    [SerializeField] float _baseFuelCapacity = 100f;
+
+    [Header("Fuel Settings")]
+    [SerializeField] float _baseFuelBurnRate = 0.05f;
+    [SerializeField] float _refuelRate = 0.2f;
+
+    [Header("Machine Parts")]
+    [SerializeField] GameObject _drillAnchor;
 
     [Header("Components")]
     [SerializeField] Collider _collider;
 
+    bool _isRefueling = false;
     float _timeSinceLastHit = 0f;
     Vector2 _bounds;
     MineDirection _currentDirection;
@@ -22,6 +31,17 @@ public class MineMachine : MonoBehaviour
     public float MoveSpeedMultiplier = 1f;
     public float BoosterForceMultiplier = 1f;
     public float MineStrengthMultiplier = 1f;
+    public float CurrentFuelCapacity;
+
+    public float RemainingFuel;
+
+    private void Start()
+    {
+        _bounds = _collider.bounds.extents;
+        CurrentFuelCapacity = _baseFuelCapacity;
+        RemainingFuel = CurrentFuelCapacity;
+        UiController.Instance.SetFuelDisplay(1f);
+    }
 
     public float GetMoveSpeed()
     {
@@ -36,6 +56,16 @@ public class MineMachine : MonoBehaviour
     public float GetMineStrength()
     {
         return _baseMineStrength * MineStrengthMultiplier;
+    }
+
+    public float GetNormalizedFuelLevel()
+    {
+        return RemainingFuel / CurrentFuelCapacity;
+    }
+
+    public float GetBurnFuelRate()
+    {
+        return _baseFuelBurnRate;
     }
 
     GridCell GetContactCell(MineDirection direction)
@@ -94,9 +124,53 @@ public class MineMachine : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, _bounds.y + 0.5f);
     }
 
-    private void Start()
+    public void Refuel(bool doInstant = false)
     {
-        _bounds = _collider.bounds.extents;
+        if (_isRefueling)
+            return;
+
+        //RemainingFuel = CurrentFuelCapacity;
+        //UiController.Instance.SetFuelDisplay(1f);
+
+        if (doInstant)
+        {
+            RemainingFuel = CurrentFuelCapacity;
+            UiController.Instance.SetFuelDisplay(1f);
+        } else
+        {
+            StartCoroutine(DoRefuel());
+        }
+    }
+
+    public void StopRefuel()
+    {
+        _isRefueling = false;
+    }
+
+    IEnumerator DoRefuel()
+    {
+        _isRefueling = true;
+        float rateMultiplier = 1f;
+
+        while (RemainingFuel <= CurrentFuelCapacity)
+        {
+            if (!_isRefueling)
+                break;
+
+            RemainingFuel += _refuelRate * rateMultiplier;
+            UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
+            rateMultiplier *= 1.05f;
+            yield return new WaitForSeconds(0.01f);
+            yield return null;
+        }
+
+        yield break;
+    }
+
+    public void BurnFuel(float amount)
+    {
+        RemainingFuel -= amount;
+        UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
     }
 
     public void TryMine()
@@ -123,6 +197,18 @@ public class MineMachine : MonoBehaviour
         _currentDirection = direction;
 
         // TODO: Animate drill direction
+        float toZ = direction switch
+        {
+            MineDirection.Left => 90f,
+            MineDirection.Right => -90f,
+            MineDirection.Down => 0f,
+            MineDirection.Up => 180f,
+            _ => 90f
+        };
+
+        float rotateTime = 0.25f;
+        Vector3 toRotate = new Vector3(0, -90f, toZ);
+        _drillAnchor.transform.DOLocalRotate(toRotate, rotateTime, RotateMode.Fast);
     }
 
     private void Update()
