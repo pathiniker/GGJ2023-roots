@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MineDirection
+{
+    NONE,
+    Left,
+    Right,
+    Down,
+    Up
+}
+
 public class PlayerControl : MonoBehaviour
 {
     const KeyCode UP_KEY = KeyCode.W;
@@ -18,10 +27,13 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] Collider _collider;
 
     float _distanceToGround;
+    float _sideDistance;
+    MineDirection _currentDirection = MineDirection.Right;
 
     private void Start()
     {
         _distanceToGround = _collider.bounds.extents.y;
+        _sideDistance = _collider.bounds.extents.x;
         _rb.useGravity = true;
     }
 
@@ -35,12 +47,78 @@ public class PlayerControl : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, _distanceToGround + 0.1f);
     }
 
+    GridCell GetContactCell(MineDirection direction)
+    {
+        if (direction == MineDirection.NONE)
+            return null;
+
+        float checkDistance = 0f;
+        float contactBufferDistance = 0.1f;
+        Vector3 vectorDirection = Vector3.zero;
+
+        switch (direction)
+        {
+            case MineDirection.Right:
+                checkDistance = _sideDistance;
+                vectorDirection = Vector3.right;
+                break;
+
+            case MineDirection.Left:
+                checkDistance = _sideDistance;
+                vectorDirection = Vector3.left;
+                break;
+
+            case MineDirection.Up:
+                checkDistance = _distanceToGround;
+                vectorDirection = Vector3.up;
+                break;
+
+            case MineDirection.Down:
+                checkDistance = _distanceToGround;
+                vectorDirection = Vector3.down;
+                break;
+
+            default:
+                vectorDirection = Vector3.zero;
+                break;
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, vectorDirection, out hit, checkDistance + contactBufferDistance))
+        {
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            GridCell cell = hit.collider.GetComponent<GridCell>();
+
+            if (cell != null)
+            {
+                //Debug.Log($"Hit cell: {cell.name}");
+                return cell;
+            }
+        }
+
+        return null;
+    }
+
+    void TryMine()
+    {
+        // TODO: Check block based on current mine direction
+        GridCell cell = GetContactCell(_currentDirection);
+
+        if (cell == null)
+            return;
+
+        // MINE!
+        Debug.LogWarning($"MINE CELL: {cell.name}");
+        Destroy(cell.gameObject);
+    }
+
     // Mine automatically when making contact with mineable ground
 
     private void Update()
     {
         Vector3 velocity = Vector3.zero;
         velocity.y = _rb.velocity.y;
+        MineDirection direction = MineDirection.NONE;
 
         if (KeyIsPressed(UP_KEY))
         {
@@ -54,6 +132,7 @@ public class PlayerControl : MonoBehaviour
         {
             // Drill down, if is on ground
             // Else, do nothing
+            direction = MineDirection.Down;
         }
 
         if (KeyIsPressed(LEFT_KEY))
@@ -61,6 +140,7 @@ public class PlayerControl : MonoBehaviour
             // Move left
             // If in contact with unminded ground, do mine action
             velocity += Vector3.left * _moveSpeed * Time.deltaTime;
+            direction = MineDirection.Left;
         }
 
         if (KeyIsPressed(RIGHT_KEY))
@@ -68,6 +148,13 @@ public class PlayerControl : MonoBehaviour
             // Move right
             // If in contact with unminded ground, do mine action
             velocity += Vector3.right * _moveSpeed * Time.deltaTime;
+            direction = MineDirection.Right;
+        }
+
+        if (direction != MineDirection.NONE)
+        {
+            _currentDirection = direction;
+            TryMine();
         }
 
         _rb.velocity = velocity;
