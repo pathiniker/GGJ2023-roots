@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class UiController : MonoBehaviour
 {
@@ -39,6 +40,11 @@ public class UiController : MonoBehaviour
     public void SyncStorageDisplay(Dictionary<string, int> inventory, int weight, int capacity)
     {
         _storageDisplay.SyncInventory(inventory, weight, capacity);
+    }
+
+    public void SetStorageCapacity(int weight, int capacity)
+    {
+        _storageDisplay.SyncCapacity(weight, capacity);
     }
 
     public void ClearInventory()

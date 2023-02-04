@@ -44,6 +44,11 @@ public class UI_StorageDisplay : MonoBehaviour
             }
         }
 
+        SyncCapacity(totalWeight, capacity);
+    }
+
+    public void SyncCapacity(int totalWeight, int capacity)
+    {
         _capacityText.SetText($"{totalWeight} / {capacity}");
     }
 }

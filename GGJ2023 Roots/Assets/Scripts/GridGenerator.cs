@@ -103,13 +103,15 @@ public class GridGenerator : MonoBehaviour
 
     public void GenerateGrid()
     {
+        int xOffset = -5;
+
         for (int y = 0; y < _gridHeight; y++)
         {
             DepthData depthData = GetDepthDataForY(-y);
 
             for (int x = 0; x < _gridWidth; x++)
             {
-                Vector3 pos = new Vector3(x, -y, 0);
+                Vector3 pos = new Vector3(x + xOffset, -y, 0);
                 GridCell cell = Instantiate(GetCellToSpawn(depthData.Level), _gridParent);
                 cell.transform.position = pos;
             }

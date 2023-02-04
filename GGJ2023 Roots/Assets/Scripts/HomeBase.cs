@@ -12,8 +12,22 @@ public class HomeBase : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            HandlePlayerExit();
+        }
+    }
+
     void HandlePlayerReturn()
     {
         GameController.Instance.MineMachine.SellInventory();
+        GameController.Instance.MineMachine.ShowUpgradesDisplay(true);
+    }
+
+    void HandlePlayerExit()
+    {
+        GameController.Instance.MineMachine.ShowUpgradesDisplay(false);
     }
 }
