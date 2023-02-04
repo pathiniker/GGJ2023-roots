@@ -9,6 +9,7 @@ public class UiController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] TextMeshProUGUI _elevationText;
+    [SerializeField] TextMeshProUGUI _coinsText;
     [SerializeField] UI_FuelGauge _fuelDisplay;
     [SerializeField] UI_StorageDisplay _storageDisplay;
 
@@ -38,5 +39,15 @@ public class UiController : MonoBehaviour
     public void SyncStorageDisplay(Dictionary<string, int> inventory, int weight, int capacity)
     {
         _storageDisplay.SyncInventory(inventory, weight, capacity);
+    }
+
+    public void ClearInventory()
+    {
+        _storageDisplay.ClearInventory();
+    }
+
+    public void SyncCurrencyDisplay(int currency)
+    {
+        _coinsText.SetText($"${currency}");
     }
 }

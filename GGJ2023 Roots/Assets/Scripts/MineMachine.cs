@@ -26,6 +26,7 @@ public class MineMachine : MonoBehaviour
     bool _isRefueling = false;
     float _timeSinceLastHit = 0f;
     Vector2 _bounds;
+    int _currency = 0;
     MineDirection _currentDirection;
 
     [Header("Run Time Miner Stats")]
@@ -185,6 +186,29 @@ public class MineMachine : MonoBehaviour
         }
 
         UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
+    }
+    
+    public void SellInventory()
+    {
+        int currencyToGain = 0;
+
+        foreach (KeyValuePair<string, int> item in _inventory)
+        {
+            MinedItemData data = CollectionsManager.Instance.GetMinedItemDataById(item.Key);
+            if (data == null)
+                continue;
+
+            currencyToGain += data.CurrencyValue;
+
+            // TODO:
+            // Animate each sell item
+        }
+
+        _currency += currencyToGain;
+        Debug.Log($"Gain {currencyToGain} coins");
+
+        UiController.Instance.SyncCurrencyDisplay(_currency);
+        UiController.Instance.ClearInventory();
     }
 
     public void StopRefuel()
