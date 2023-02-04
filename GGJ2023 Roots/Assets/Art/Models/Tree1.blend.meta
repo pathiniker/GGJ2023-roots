@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: 41e9066d8de95d0448f273e6237dbb50
+guid: 59d59e206fcbd5d4b8f9b809c3ba3a20
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Drill1
-    second: {fileID: 2100000, guid: e5d4e5e63a38fec47b1cb4ad29f3d362, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Drill2
-    second: {fileID: 2100000, guid: 3914b0c6eb96bef4daab0567b9008548, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

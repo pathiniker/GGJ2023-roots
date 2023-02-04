@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 41e9066d8de95d0448f273e6237dbb50
+guid: 619ac553d24a0944bb50b18bddc4c641
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -7,13 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Drill1
-    second: {fileID: 2100000, guid: e5d4e5e63a38fec47b1cb4ad29f3d362, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Drill2
-    second: {fileID: 2100000, guid: 3914b0c6eb96bef4daab0567b9008548, type: 2}
+      name: Tree
+    second: {fileID: 2100000, guid: 141f237d53b892947a29a07d99b52a39, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
