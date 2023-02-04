@@ -25,7 +25,7 @@ public class GridCell : MonoBehaviour
         Health = _cellData.StartingHealth;
     }
 
-    public void DealDamage(int amount)
+    public void DealDamage(float amount)
     {
         amount = Mathf.Abs(amount);
         Health -= amount;
