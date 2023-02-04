@@ -11,6 +11,7 @@ public class MineMachine : MonoBehaviour
     [SerializeField] float _hitDelay = 0.2f;
     [SerializeField] float _baseMineStrength = 1f;
     [SerializeField] float _baseFuelCapacity = 100f;
+    [SerializeField] int _baseStorageCapacity = 25;
 
     [Header("Fuel Settings")]
     [SerializeField] float _baseFuelBurnRate = 0.05f;
@@ -32,15 +33,33 @@ public class MineMachine : MonoBehaviour
     public float BoosterForceMultiplier = 1f;
     public float MineStrengthMultiplier = 1f;
     public float CurrentFuelCapacity;
+    public int CurrentStorageCapacity;
 
     public float RemainingFuel;
+
+    Dictionary<string, int> _inventory = new Dictionary<string, int>();
 
     private void Start()
     {
         _bounds = _collider.bounds.extents;
         CurrentFuelCapacity = _baseFuelCapacity;
+        CurrentStorageCapacity = _baseStorageCapacity;
         RemainingFuel = CurrentFuelCapacity;
+
         UiController.Instance.SetFuelDisplay(1f);
+        UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
+    }
+
+    public int GetCurrentWeight()
+    {
+        int total = 0;
+
+        foreach (int value in _inventory.Values)
+        {
+            total += value;
+        }
+
+        return total;
     }
 
     public float GetMoveSpeed()
@@ -50,7 +69,10 @@ public class MineMachine : MonoBehaviour
 
     public float GetBoosterForce()
     {
-        return _baseBoosterForce * BoosterForceMultiplier;
+        // Booster is weaker depending on storage!
+        float storageFill = GetCurrentWeight() / CurrentStorageCapacity;
+        float storageDrag = Mathf.Lerp(1f, 0.5f, storageFill);
+        return _baseBoosterForce * BoosterForceMultiplier * storageDrag;
     }
 
     public float GetMineStrength()
@@ -140,6 +162,29 @@ public class MineMachine : MonoBehaviour
         {
             StartCoroutine(DoRefuel());
         }
+    }
+
+    public void AddItemToInventory(string id, int qty = 1)
+    {
+        if (string.IsNullOrEmpty(id))
+            return;
+
+        if (GetCurrentWeight() >= CurrentStorageCapacity)
+        {
+            // TODO: Alert storage is full!
+            Debug.LogWarning("Storage full! (Create UI)");
+            return;
+        }
+
+        if (_inventory.ContainsKey(id))
+        {
+            _inventory[id] += qty;
+        } else
+        {
+            _inventory.Add(id, qty);
+        }
+
+        UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
     }
 
     public void StopRefuel()

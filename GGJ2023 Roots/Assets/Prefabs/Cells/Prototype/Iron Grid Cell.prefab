@@ -51,6 +51,7 @@ MonoBehaviour:
     SpawnChance: 0
     SpawnLevel: 1
     StartingHealth: 5
+    MinedItemId: Iron
 --- !u!33 &6609529105569108486
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ public class UiController : MonoBehaviour
     [Header("Components")]
     [SerializeField] TextMeshProUGUI _elevationText;
     [SerializeField] UI_FuelGauge _fuelDisplay;
+    [SerializeField] UI_StorageDisplay _storageDisplay;
 
     private void Awake()
     {
@@ -32,5 +33,10 @@ public class UiController : MonoBehaviour
     public void SetFuelDisplay(float normalizedLevel)
     {
         _fuelDisplay.SetFuelLevelNormalized(normalizedLevel);
+    }
+
+    public void SyncStorageDisplay(Dictionary<string, int> inventory, int weight, int capacity)
+    {
+        _storageDisplay.SyncInventory(inventory, weight, capacity);
     }
 }

@@ -93,14 +93,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseMoveSpeed: 200
-  _baseBoosterForce: 200
+  _baseBoosterForce: 250
   _hitDelay: 0.2
   _baseMineStrength: 1
+  _baseFuelCapacity: 100
+  _baseStorageCapacity: 25
+  _baseFuelBurnRate: 0.01
+  _refuelRate: 0.2
   _drillAnchor: {fileID: 3152877216657813037}
   _collider: {fileID: 4880642641042938825}
   MoveSpeedMultiplier: 1
   BoosterForceMultiplier: 1
   MineStrengthMultiplier: 1
+  CurrentFuelCapacity: 0
+  CurrentStorageCapacity: 0
+  RemainingFuel: 0
 --- !u!1001 &5816385510526213325
 PrefabInstance:
   m_ObjectHideFlags: 0

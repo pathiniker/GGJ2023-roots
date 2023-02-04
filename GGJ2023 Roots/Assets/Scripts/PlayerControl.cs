@@ -24,6 +24,8 @@ public class PlayerControl : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody _rb;
 
+    public MineMachine MineMachine { get { return _mineMachine; } }
+
     private void Start()
     {
         _rb.useGravity = true;
