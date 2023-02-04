@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6609529105569108484}
   - component: {fileID: 6609529105569108480}
   m_Layer: 0
-  m_Name: Standard Grid Cell
+  m_Name: TierTwoGroundCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7062005cb64690e4c953facf832d0900, type: 2}
+  - {fileID: 2100000, guid: e704031698dd3704997f2e80f3aa18ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
