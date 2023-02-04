@@ -31,6 +31,14 @@ public class GridCell : MonoBehaviour
         Health -= amount;
 
         if (Health <= 0)
-            Destroy(gameObject);
+            FinishCell();
+    }
+
+    public void FinishCell()
+    {
+        // Collect items from cell
+        GameController.Instance.MineMachine.AddItemToInventory(Data.MinedItemId, 1);
+
+        Destroy(gameObject);
     }
 }

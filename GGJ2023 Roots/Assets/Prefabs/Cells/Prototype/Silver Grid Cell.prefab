@@ -51,6 +51,7 @@ MonoBehaviour:
     SpawnChance: 0
     SpawnLevel: 3
     StartingHealth: 15
+    MinedItemId: Silver
 --- !u!33 &6609529105569108486
 MeshFilter:
   m_ObjectHideFlags: 0
