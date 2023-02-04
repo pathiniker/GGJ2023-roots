@@ -128,6 +128,7 @@ public class PlayerControl : MonoBehaviour
         velocity.y = _rb.velocity.y;
         MineDirection direction = MineDirection.NONE;
         _timeSinceLastHit += Time.deltaTime;
+        UiController.Instance.SetElevationText(transform.position.y);
 
         if (KeyIsPressed(UP_KEY))
         {
