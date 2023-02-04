@@ -15,8 +15,14 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] Rigidbody _rb;
+    [SerializeField] Collider _collider;
 
-    bool _isGrounded = true;
+    float _distanceToGround;
+
+    private void Start()
+    {
+        _distanceToGround = _collider.bounds.extents.y;
+    }
 
     bool KeyIsPressed(KeyCode key)
     {
@@ -25,9 +31,7 @@ public class PlayerControl : MonoBehaviour
 
     bool IsGrounded()
     {
-        // TODO: Detect if miner object is landed on a surface
-
-        return true;
+        return Physics.Raycast(transform.position, -Vector3.up, _distanceToGround + 0.1f);
     }
 
     // Mine automatically when making contact with mineable ground

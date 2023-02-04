@@ -649,6 +649,7 @@ MonoBehaviour:
   _moveSpeed: 200
   _boosterForce: 250
   _rb: {fileID: 988766575}
+  _collider: {fileID: 988766577}
 --- !u!143 &988766577
 CharacterController:
   m_ObjectHideFlags: 0
