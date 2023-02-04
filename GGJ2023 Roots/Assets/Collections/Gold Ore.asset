@@ -24,3 +24,4 @@ MonoBehaviour:
   Data:
     ItemId: Gold
     Weight: 1
+    CurrencyValue: 50

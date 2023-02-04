@@ -24,3 +24,4 @@ MonoBehaviour:
   Data:
     ItemId: Copper
     Weight: 1
+    CurrencyValue: 5

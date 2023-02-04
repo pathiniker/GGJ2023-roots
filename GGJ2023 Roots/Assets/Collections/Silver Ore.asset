@@ -24,3 +24,4 @@ MonoBehaviour:
   Data:
     ItemId: Silver
     Weight: 1
+    CurrencyValue: 25

@@ -24,3 +24,4 @@ MonoBehaviour:
   Data:
     ItemId: Iron
     Weight: 1
+    CurrencyValue: 10
