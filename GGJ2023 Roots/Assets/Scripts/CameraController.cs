@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class CameraController : MonoBehaviour
 {
+    static public CameraController Instance;
+
     [Header("Settings")]
     [SerializeField] Vector3 _cameraOffset;
     [SerializeField] float _smoothSpeed = 0.1f;
@@ -12,6 +14,19 @@ public class CameraController : MonoBehaviour
     [Header("Components")]
     [SerializeField] Camera _camera;
     [SerializeField] GameObject _followObject;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     Vector3 GetFollowPosition()
     {
@@ -39,5 +54,12 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         FollowPlayer();
+    }
+
+    public void DoShake(float normalizedAmount)
+    {
+        //float strength = 2f * normalizedAmount;
+        //float duration = 1f * normalizedAmount;
+        //transform.DOShakePosition(duration, strength, randomnessMode: ShakeRandomnessMode.Full);
     }
 }

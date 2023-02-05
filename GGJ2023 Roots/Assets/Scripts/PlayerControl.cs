@@ -25,6 +25,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] Rigidbody _rb;
 
     bool _isBoosting = false;
+    bool _isGrounded = false;
     bool _upPressed = false;
     bool _downPressed = false;
     bool _leftPressed = false;
@@ -93,6 +94,22 @@ public class PlayerControl : MonoBehaviour
         velocity.y = _rb.velocity.y;
         MineDirection direction = MineDirection.NONE;
         float moveSpeed = _mineMachine.GetMoveSpeed();
+
+        if (isGrounded && !_isGrounded)
+        {
+            // Just landed. Shake screen / deal damage based on velocity
+            //Debug.Log($"Landing velocity: {_rb.velocity}");
+
+            float yVelocity = _rb.velocity.y;
+
+            if (yVelocity < -9.8f)
+            {
+                float shake = yVelocity / -20f;
+                shake = Mathf.Min(shake, 1f);
+                CameraController.Instance.DoShake(shake);
+                //Debug.Log("Shake: " + shake);
+            }
+        }
 
         float fuelToBurn = 0f;
         float fuelBurnRate = _mineMachine.GetBurnFuelRate();
@@ -180,5 +197,7 @@ public class PlayerControl : MonoBehaviour
         {
             _mineMachine.StopRefuel();
         }
+
+        _isGrounded = isGrounded;
     }
 }

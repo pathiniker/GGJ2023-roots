@@ -56,7 +56,7 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
-    GridCell GetCellToSpawn(DepthData data)
+    GridCell GetCellToSpawn(DepthData data, bool lastWasNull)
     {
         float chance = Random.Range(0f, 1f);
 
@@ -72,6 +72,13 @@ public class GridGenerator : MonoBehaviour
 
         if (eligible.Count == 0)
             return data.GroundCellPrefab;
+
+        float emptyChance = 0.08f;
+        if (lastWasNull)
+            emptyChance *= 3f;
+
+        if (chance >= 1f - emptyChance)
+            return null;
 
         // Temp
         return eligible[Random.Range(0, eligible.Count)];
@@ -114,11 +121,17 @@ public class GridGenerator : MonoBehaviour
         for (int y = 0; y < _gridHeight; y++)
         {
             DepthData depthData = GetDepthDataForY(-y);
+            bool lastWasNull = false;
 
             for (int x = 0; x < _gridWidth; x++)
             {
                 Vector3 pos = new Vector3(x + xOffset, -y, 0);
-                GridCell cell = Instantiate(GetCellToSpawn(depthData), _gridParent);
+                GridCell prefab = GetCellToSpawn(depthData, lastWasNull);
+                lastWasNull = prefab == null;
+                if (prefab == null)
+                    continue;
+
+                GridCell cell = Instantiate(prefab, _gridParent);
                 cell.transform.position = pos;
             }
         }
