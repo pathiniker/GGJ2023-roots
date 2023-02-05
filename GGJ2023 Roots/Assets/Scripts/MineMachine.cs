@@ -22,8 +22,10 @@ public class MineMachine : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] Collider _collider;
+    [SerializeField] UI_UpgradesDisplay _upgradesDisplay;
 
     bool _isRefueling = false;
+    bool _shouldReRollUpgrades = true;
     float _timeSinceLastHit = 0f;
     Vector2 _bounds;
     int _currency = 0;
@@ -46,9 +48,15 @@ public class MineMachine : MonoBehaviour
         CurrentFuelCapacity = _baseFuelCapacity;
         CurrentStorageCapacity = _baseStorageCapacity;
         RemainingFuel = CurrentFuelCapacity;
+        _upgradesDisplay.Show(false);
 
         UiController.Instance.SetFuelDisplay(1f);
         UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
+    }
+
+    public bool CanAfford(int requestedAmount)
+    {
+        return _currency >= requestedAmount;
     }
 
     public int GetCurrentWeight()
@@ -187,6 +195,18 @@ public class MineMachine : MonoBehaviour
 
         UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
     }
+
+    public void ShowUpgradesDisplay(bool show)
+    {
+        // Decide if we should reroll
+        if (_shouldReRollUpgrades)
+        {
+            _upgradesDisplay.ReRollOptions();
+            _shouldReRollUpgrades = false;
+        }
+
+        _upgradesDisplay.Show(show);
+    }
     
     public void SellInventory()
     {
@@ -207,13 +227,48 @@ public class MineMachine : MonoBehaviour
         _currency += currencyToGain;
         Debug.Log($"Gain {currencyToGain} coins");
 
+        if (currencyToGain > 0)
+            _shouldReRollUpgrades = true;
+
         UiController.Instance.SyncCurrencyDisplay(_currency);
         UiController.Instance.ClearInventory();
+        UiController.Instance.SetStorageCapacity(0, CurrentStorageCapacity);
+        _inventory.Clear();
+    }
+
+    public void UpgradeDrill()
+    {
+        MineStrengthMultiplier += 1f;
+    }
+
+    public void UpgradeFuel()
+    {
+        CurrentFuelCapacity += 100;
+        UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
+    }
+
+    public void UpgradeStorage()
+    {
+        CurrentStorageCapacity += 25;
+        UiController.Instance.SetStorageCapacity(GetCurrentWeight(), CurrentStorageCapacity);
     }
 
     public void StopRefuel()
     {
         _isRefueling = false;
+    }
+
+    public void SpendCurrency(int amount, System.Action onCompletePurchaseCb = null)
+    {
+        if (!CanAfford(amount))
+        {
+            // TODO: Notify user can't afford
+            return;
+        }
+
+        _currency -= amount;
+        UiController.Instance.SyncCurrencyDisplay(_currency);
+        onCompletePurchaseCb?.Invoke();
     }
 
     IEnumerator DoRefuel()

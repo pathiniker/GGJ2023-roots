@@ -8,4 +8,5 @@ public class MinedItemData
     public string ItemId;
     public float Weight = 1f;
     public int CurrencyValue = 1;
+    public Color ItemColor = Color.white;
 }
