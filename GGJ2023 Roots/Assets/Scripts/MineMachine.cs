@@ -89,7 +89,7 @@ public class MineMachine : MonoBehaviour
     {
         // Booster is weaker depending on storage!
         float storageFill = GetCurrentWeight() / CurrentStorageCapacity;
-        float storageDrag = Mathf.Lerp(1f, 0.5f, storageFill);
+        float storageDrag = Mathf.Lerp(1f, 0.75f, storageFill);
         return _baseBoosterForce * BoosterForceMultiplier * storageDrag;
     }
 
