@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+
 [System.Serializable]
 public class DepthData
 {
@@ -22,7 +23,6 @@ public class GridGenerator : MonoBehaviour
     [Header("Settings")]
     [SerializeField] int _gridWidth = 10;
     [SerializeField] int _gridHeight = 15;
-    [SerializeField] Vector2 _gridSize = new Vector2(10, 15);
     [SerializeField, PropertyRange(0, 1)] float _dirtChance = 0.67f;
     [SerializeField] List<DepthData> _depthLevels = new List<DepthData>();
 
@@ -67,19 +67,23 @@ public class GridGenerator : MonoBehaviour
 
         if (chance <= _dirtChance)
         {
-            return _standardCell;
+            return data.GroundCellPrefab;
         }
 
         List<GridCell> eligible = new List<GridCell>();
-        eligible.Add(data.GroundCellPrefab);
+        
 
         _gridDepthDictionary.TryGetValue(data.Level, out eligible);
+        eligible.Add(data.GroundCellPrefab);
+
+        //if (eligible.Count == 0)
+        //    return data.GroundCellPrefab;
 
         // Temp
         return eligible[Random.Range(0, eligible.Count)];
     }
 
-    DepthData GetDepthDataForY(int y)
+    public DepthData GetDepthDataForY(int y)
     {
         DepthData result = _depthLevels[0];
 
@@ -107,15 +111,6 @@ public class GridGenerator : MonoBehaviour
         }
 
         return prefabs;
-    }
-
-    public DepthLevel GetCurrentDepthLevel()
-    {
-        // TODO
-        // Get current player Y
-        // Return Depth Level of greatest value that is less than current player Y
-
-        return DepthLevel.GroundLevel;
     }
 
     public void GenerateGrid()

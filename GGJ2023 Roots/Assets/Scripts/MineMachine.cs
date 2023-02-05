@@ -19,6 +19,7 @@ public class MineMachine : MonoBehaviour
 
     [Header("Machine Parts")]
     [SerializeField] GameObject _drillAnchor;
+    [SerializeField] List<GameObject> _wheels = new List<GameObject>();
 
     [Header("Components")]
     [SerializeField] Collider _collider;
@@ -333,6 +334,22 @@ public class MineMachine : MonoBehaviour
         float rotateTime = 0.25f;
         Vector3 toRotate = new Vector3(rotate, 0, 0);
         _drillAnchor.transform.DOLocalRotate(toRotate, rotateTime, RotateMode.Fast);
+    }
+
+    public void DoWheelRotation(MineDirection direction, bool isGrounded)
+    {
+        float rotValue = 2f;
+
+        if (!isGrounded)
+            rotValue *= 2f;
+
+        for (int i = 0; i < _wheels.Count; i++)
+        {
+            GameObject o = _wheels[i];
+            float x = direction == MineDirection.Left ? rotValue : -rotValue;
+            Vector3 rot = new Vector3(x, 0, 0);
+            o.transform.DOBlendableLocalRotateBy(rot, 0.1f);
+        }
     }
 
     private void Update()

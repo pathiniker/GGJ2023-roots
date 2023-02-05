@@ -49,9 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellData:
     SpawnChance: 0
-    SpawnLevel: 1
+    SpawnLevel: 4
     StartingHealth: 10
-    MinedItemId: Iron
+    MinedItemId: Silver
 --- !u!33 &6609529105569108486
 MeshFilter:
   m_ObjectHideFlags: 0

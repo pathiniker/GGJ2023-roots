@@ -24,6 +24,8 @@ public class PlayerControl : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody _rb;
 
+    DepthLevel _currentDepthLevel = DepthLevel.GroundLevel;
+
     public MineMachine MineMachine { get { return _mineMachine; } }
 
     private void Start()
@@ -36,10 +38,41 @@ public class PlayerControl : MonoBehaviour
         return Input.GetKey(key);
     }
 
+    public DepthLevel GetCurrentDepthLevel()
+    {
+        // TODO
+        // Get current player Y
+        // Return Depth Level of greatest value that is less than current player Y
+
+        int y = Mathf.FloorToInt(transform.position.y);
+        DepthData data = GameController.Instance.GridGenerator.GetDepthDataForY(y);
+
+        return data.Level;
+    }
+
     // Mine automatically when making contact with mineable ground
 
     private void Update()
     {
+        DepthLevel currentLevel = GetCurrentDepthLevel();
+        if (currentLevel != _currentDepthLevel)
+        {
+            int previousIdx = (int)_currentDepthLevel;
+            int newIdx = (int)currentLevel;
+
+            if (newIdx > previousIdx)
+            {
+                // Deeper, add new audio
+                AudioManager.Instance.FadeAudioForDepth(true, currentLevel);
+            } else
+            {
+                // Higher, remove previous audio
+                AudioManager.Instance.FadeAudioForDepth(false, _currentDepthLevel);
+            }
+        }
+
+        _currentDepthLevel = currentLevel;
+
         Vector3 velocity = Vector3.zero;
         bool isGrounded = _mineMachine.IsGrounded();
         velocity.y = _rb.velocity.y;
@@ -94,6 +127,14 @@ public class PlayerControl : MonoBehaviour
         if (direction != MineDirection.NONE)
         {
             _mineMachine.SetDirection(direction);
+
+            switch (direction)
+            {
+                case MineDirection.Left:
+                case MineDirection.Right:
+                    _mineMachine.DoWheelRotation(direction, isGrounded);
+                    break;
+            }
 
             if (isGrounded)
                 _mineMachine.TryMine();
