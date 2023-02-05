@@ -82,7 +82,6 @@ public class GridCell : MonoBehaviour
 
         for (int i = 0; i < spawned.Count; i++)
         {
-            Debug.Log($"Destroy {spawned[i].name}");
             Destroy(spawned[i].gameObject);
         }
 

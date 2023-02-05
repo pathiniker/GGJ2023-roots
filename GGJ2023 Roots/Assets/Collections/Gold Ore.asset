@@ -25,3 +25,4 @@ MonoBehaviour:
     ItemId: Gold
     Weight: 1
     CurrencyValue: 50
+    ItemColor: {r: 1, g: 0.8598071, b: 0.24056602, a: 1}

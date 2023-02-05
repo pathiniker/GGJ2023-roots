@@ -207,6 +207,8 @@ MonoBehaviour:
   - {fileID: 6609529105569108480, guid: 0df9f63c1865fc540ae9a450dd6ee91f, type: 3}
   _fragmentPrefabs:
   - {fileID: 4650047469358233871, guid: 2c5d4e9c6c54a8945b278f2d46aa7823, type: 3}
+  - {fileID: 4650047469358233871, guid: 7cf74a49f5ea54448bf0ac59d136b897, type: 3}
+  - {fileID: 4650047469358233871, guid: c2d91f7b6977a5c48a78e4f1afa9082a, type: 3}
 --- !u!1 &296411748
 GameObject:
   m_ObjectHideFlags: 0

@@ -321,17 +321,17 @@ public class MineMachine : MonoBehaviour
         _currentDirection = direction;
 
         // TODO: Animate drill direction
-        float toZ = direction switch
+        float rotate = direction switch
         {
-            MineDirection.Left => 90f,
-            MineDirection.Right => -90f,
-            MineDirection.Down => 0f,
-            MineDirection.Up => 180f,
+            MineDirection.Left => -180f,
+            MineDirection.Right => 0f,
+            MineDirection.Down => -90f,
+            MineDirection.Up => 90f,
             _ => 90f
         };
 
         float rotateTime = 0.25f;
-        Vector3 toRotate = new Vector3(0, -90f, toZ);
+        Vector3 toRotate = new Vector3(rotate, 0, 0);
         _drillAnchor.transform.DOLocalRotate(toRotate, rotateTime, RotateMode.Fast);
     }
 

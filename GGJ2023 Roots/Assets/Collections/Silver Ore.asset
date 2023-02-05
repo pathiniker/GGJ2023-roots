@@ -25,3 +25,4 @@ MonoBehaviour:
     ItemId: Silver
     Weight: 1
     CurrencyValue: 25
+    ItemColor: {r: 0.63857245, g: 0.77214456, b: 0.7735849, a: 1}

@@ -25,3 +25,4 @@ MonoBehaviour:
     ItemId: Iron
     Weight: 1
     CurrencyValue: 10
+    ItemColor: {r: 0.24203454, g: 0.33708826, b: 0.3490566, a: 1}
