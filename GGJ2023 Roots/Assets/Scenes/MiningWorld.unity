@@ -174,16 +174,28 @@ MonoBehaviour:
   _depthLevels:
   - Level: 0
     DepthY: 0
+    GroundCellPrefab: {fileID: 6609529105569108480, guid: 8ebd53c1890904849948a8e6b9fbc6d1,
+      type: 3}
   - Level: 1
     DepthY: -1
+    GroundCellPrefab: {fileID: 6609529105569108480, guid: 8ebd53c1890904849948a8e6b9fbc6d1,
+      type: 3}
   - Level: 2
     DepthY: -20
+    GroundCellPrefab: {fileID: 6609529105569108480, guid: 69c072a4a94dd4d4e93217b748585e00,
+      type: 3}
   - Level: 3
     DepthY: -40
+    GroundCellPrefab: {fileID: 6609529105569108480, guid: 8890a7b2950d5e747972dc2200bfe691,
+      type: 3}
   - Level: 4
     DepthY: -60
+    GroundCellPrefab: {fileID: 6609529105569108480, guid: 2645cf25683e59f48815ca858118abd8,
+      type: 3}
   - Level: 5
     DepthY: -80
+    GroundCellPrefab: {fileID: 6609529105569108480, guid: fa4e17d4da04b6443860ee7f41cdaabb,
+      type: 3}
   _gridParent: {fileID: 223097623}
   _standardCell: {fileID: 6609529105569108480, guid: 987216e49a4c2354fb0926ae586e71cc,
     type: 3}
@@ -193,6 +205,10 @@ MonoBehaviour:
   - {fileID: 6609529105569108480, guid: 9eb9b259a5c54024a9aacab2c4b56b10, type: 3}
   - {fileID: 6609529105569108480, guid: 833e64b9cfd78db479725298650e3e3c, type: 3}
   - {fileID: 6609529105569108480, guid: 0df9f63c1865fc540ae9a450dd6ee91f, type: 3}
+  _fragmentPrefabs:
+  - {fileID: 4650047469358233871, guid: 2c5d4e9c6c54a8945b278f2d46aa7823, type: 3}
+  - {fileID: 4650047469358233871, guid: 7cf74a49f5ea54448bf0ac59d136b897, type: 3}
+  - {fileID: 4650047469358233871, guid: c2d91f7b6977a5c48a78e4f1afa9082a, type: 3}
 --- !u!1 &296411748
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,6 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 988766576}
   _mineMachine: {fileID: 988766579}
+  _gridGenerator: {fileID: 223097624}
 --- !u!1 &619880260
 GameObject:
   m_ObjectHideFlags: 0

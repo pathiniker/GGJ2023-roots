@@ -25,3 +25,4 @@ MonoBehaviour:
     ItemId: Copper
     Weight: 1
     CurrencyValue: 5
+    ItemColor: {r: 0.9622642, g: 0.5489838, b: 0.24056605, a: 1}
