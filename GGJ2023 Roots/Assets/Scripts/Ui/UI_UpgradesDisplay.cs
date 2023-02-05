@@ -5,12 +5,11 @@ using UnityEngine;
 public class UI_UpgradesDisplay : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] GameObject _canvasParent;
     [SerializeField] List<UI_UpgradeOption> _optionButtons = new List<UI_UpgradeOption>();
 
     public void Show(bool show)
     {
-        _canvasParent.SetActive(show);
+        gameObject.SetActive(show);
     }
 
     public void ReRollOptions()

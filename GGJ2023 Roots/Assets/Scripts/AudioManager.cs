@@ -10,6 +10,10 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] AudioMixer _mixer;
     [SerializeField] List<AudioSource> _depthAudioLayers = new List<AudioSource>();
+    [SerializeField] AudioSource _sfx;
+
+    [Header("Audio Clips")]
+    [SerializeField] List<AudioClip> _breakCellSfx = new List<AudioClip>();
 
     private void Awake()
     {
@@ -46,6 +50,18 @@ public class AudioManager : MonoBehaviour
     public void FadeAudioForDepth(bool on, DepthLevel level)
     {
         AudioSource src = GetAudioSrcForLevel(level);
-        src.DOFade(on ? 1f : 0f, 1.5f);
+        float fadeTime = 5f;
+        float maxVolume = 0.85f;
+        src.DOFade(on ? maxVolume : 0f, fadeTime);
+    }
+
+    public void PlayBreakCellSfx()
+    {
+        if (_breakCellSfx.Count < 1)
+            return;
+
+        float pitch = Random.Range(0.8f, 1.2f);
+        _sfx.pitch = pitch;
+        _sfx.PlayOneShot(_breakCellSfx[Random.Range(0, _breakCellSfx.Count - 1)]);
     }
 }

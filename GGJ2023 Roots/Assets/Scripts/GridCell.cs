@@ -17,6 +17,8 @@ public class GridCell : MonoBehaviour
 {
     [SerializeField] CellData _cellData;
 
+    bool _isShattering = false;
+
     public float Health { get; private set; }
 
     public CellData Data { get { return _cellData; } }
@@ -40,7 +42,12 @@ public class GridCell : MonoBehaviour
         // Collect items from cell
 
         if (!string.IsNullOrEmpty(Data.MinedItemId))
-            StartCoroutine(DoShatter());
+        {
+            if (!_isShattering)
+                StartCoroutine(DoShatter());
+
+            _isShattering = true;
+        }
         else
             Destroy(gameObject);
     }
@@ -49,6 +56,8 @@ public class GridCell : MonoBehaviour
     {
         float duration = 0.35f;
         int count = 5;
+
+        AudioManager.Instance.PlayBreakCellSfx();
 
         List<RockFragment> prefabs = GameController.Instance.GridGenerator.GetRockFragmentPrefabs(count);
         List<RockFragment> spawned = new List<RockFragment>();

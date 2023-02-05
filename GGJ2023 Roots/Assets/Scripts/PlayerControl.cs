@@ -43,7 +43,7 @@ public class PlayerControl : MonoBehaviour
         return Input.GetKey(key);
     }
 
-    public DepthLevel GetCurrentDepthLevel()
+    public DepthData GetCurrentDepthData()
     {
         // TODO
         // Get current player Y
@@ -52,7 +52,7 @@ public class PlayerControl : MonoBehaviour
         int y = Mathf.FloorToInt(transform.position.y);
         DepthData data = GameController.Instance.GridGenerator.GetDepthDataForY(y);
 
-        return data.Level;
+        return data;
     }
 
     // Mine automatically when making contact with mineable ground
@@ -67,16 +67,17 @@ public class PlayerControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DepthLevel currentLevel = GetCurrentDepthLevel();
-        if (currentLevel != _currentDepthLevel)
+        DepthData currentLevel = GetCurrentDepthData();
+        UiController.Instance.SetDepthLevelName(currentLevel.LevelName);
+        if (currentLevel.Level != _currentDepthLevel)
         {
             int previousIdx = (int)_currentDepthLevel;
-            int newIdx = (int)currentLevel;
+            int newIdx = (int)currentLevel.Level;
 
             if (newIdx > previousIdx)
             {
                 // Deeper, add new audio
-                AudioManager.Instance.FadeAudioForDepth(true, currentLevel);
+                AudioManager.Instance.FadeAudioForDepth(true, currentLevel.Level);
             }
             else
             {
@@ -85,7 +86,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        _currentDepthLevel = currentLevel;
+        _currentDepthLevel = currentLevel.Level;
 
         Vector3 velocity = Vector3.zero;
         bool isGrounded = _mineMachine.IsGrounded();

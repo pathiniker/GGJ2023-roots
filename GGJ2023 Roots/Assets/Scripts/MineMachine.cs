@@ -36,6 +36,7 @@ public class MineMachine : MonoBehaviour
     float _timeSinceLastHit = 0f;
     Vector2 _bounds;
     int _currency = 0;
+    bool _isMining = false;
     MineDirection _currentDirection;
 
     [Header("Run Time Miner Stats")]
@@ -239,7 +240,6 @@ public class MineMachine : MonoBehaviour
             _shouldReRollUpgrades = true;
 
         UiController.Instance.SyncCurrencyDisplay(_currency);
-        UiController.Instance.ClearInventory();
         UiController.Instance.SetStorageCapacity(0, CurrentStorageCapacity);
         _inventory.Clear();
     }
@@ -310,6 +310,8 @@ public class MineMachine : MonoBehaviour
         // TODO: Check block based on current mine direction
         GridCell cell = GetContactCell(_currentDirection);
 
+        _isMining = cell != null;
+
         if (cell == null)
             return;
 
@@ -323,7 +325,7 @@ public class MineMachine : MonoBehaviour
 
         if (!string.IsNullOrEmpty(cell.Data.MinedItemId))
         {
-            bool doSpark = Random.Range(0f, 1f) < 0.2f;
+            bool doSpark = Random.Range(0f, 1f) < 0.45f;
 
             if (doSpark)
                 Instantiate(_sparkPrefab, _sparkSpawnPoint); // Destroys self
@@ -358,10 +360,12 @@ public class MineMachine : MonoBehaviour
 
     public void DoWheelRotation(MineDirection direction, bool isGrounded)
     {
-        float rotValue = 2f;
+        float rotValue = 5f * MoveSpeedMultiplier;
 
         if (!isGrounded)
             rotValue *= 2f;
+        else if (_isMining)
+            rotValue *= 0.1f;
 
         for (int i = 0; i < _wheels.Count; i++)
         {

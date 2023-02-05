@@ -10,12 +10,7 @@ public class DepthData
     public DepthLevel Level;
     public int DepthY;
     public GridCell GroundCellPrefab;
-
-    public DepthData(DepthLevel level, int y)
-    {
-        Level = level;
-        DepthY = y;
-    }
+    public string LevelName;
 }
 
 public class GridGenerator : MonoBehaviour
