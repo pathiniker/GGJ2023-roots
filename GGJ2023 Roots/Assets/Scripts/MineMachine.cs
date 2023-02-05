@@ -19,11 +19,17 @@ public class MineMachine : MonoBehaviour
 
     [Header("Machine Parts")]
     [SerializeField] GameObject _drillAnchor;
+    [SerializeField] GameObject _drillTip;
     [SerializeField] List<GameObject> _wheels = new List<GameObject>();
+    [SerializeField] GameObject _boostersParent;
+    [SerializeField] Transform _sparkSpawnPoint;
 
     [Header("Components")]
     [SerializeField] Collider _collider;
     [SerializeField] UI_UpgradesDisplay _upgradesDisplay;
+
+    [Header("FX Prefabs")]
+    [SerializeField] GameObject _sparkPrefab;
 
     bool _isRefueling = false;
     bool _shouldReRollUpgrades = true;
@@ -51,6 +57,7 @@ public class MineMachine : MonoBehaviour
         RemainingFuel = CurrentFuelCapacity;
         _upgradesDisplay.Show(false);
 
+        ToggleBoosters(false);
         UiController.Instance.SetFuelDisplay(1f);
         UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
     }
@@ -300,15 +307,28 @@ public class MineMachine : MonoBehaviour
 
     public void TryMine()
     {
-        if (_timeSinceLastHit < _hitDelay)
-            return;
-
         // TODO: Check block based on current mine direction
         GridCell cell = GetContactCell(_currentDirection);
 
         if (cell == null)
             return;
 
+        float spinRate = 0.1f;
+        float spinMultiplyer = 20f;
+        Vector3 spin = Vector3.back * spinMultiplyer;
+        _drillTip.transform.DOBlendableLocalRotateBy(spin, spinRate, RotateMode.LocalAxisAdd);
+
+        if (_timeSinceLastHit < _hitDelay)
+            return;
+
+        if (!string.IsNullOrEmpty(cell.Data.MinedItemId))
+        {
+            bool doSpark = Random.Range(0f, 1f) < 0.2f;
+
+            if (doSpark)
+                Instantiate(_sparkPrefab, _sparkSpawnPoint); // Destroys self
+        }
+        
         // MINE!
         //Debug.LogWarning($"MINE CELL: {cell.name}");
         _timeSinceLastHit = 0f;
@@ -350,6 +370,11 @@ public class MineMachine : MonoBehaviour
             Vector3 rot = new Vector3(x, 0, 0);
             o.transform.DOBlendableLocalRotateBy(rot, 0.1f);
         }
+    }
+
+    public void ToggleBoosters(bool on)
+    {
+        _boostersParent.SetActive(on);
     }
 
     private void Update()

@@ -50,7 +50,7 @@ MonoBehaviour:
   _cellData:
     SpawnChance: 0
     SpawnLevel: 4
-    StartingHealth: 10
+    StartingHealth: 25
     MinedItemId: Silver
 --- !u!33 &6609529105569108486
 MeshFilter:

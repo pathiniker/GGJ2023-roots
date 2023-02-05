@@ -50,7 +50,7 @@ MonoBehaviour:
   _cellData:
     SpawnChance: 0
     SpawnLevel: 5
-    StartingHealth: 10
+    StartingHealth: 30
     MinedItemId: Gold
 --- !u!33 &6609529105569108486
 MeshFilter:

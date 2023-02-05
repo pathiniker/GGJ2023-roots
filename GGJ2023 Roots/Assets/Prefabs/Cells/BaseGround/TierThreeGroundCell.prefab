@@ -112,6 +112,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellData:
     SpawnChance: 0
-    SpawnLevel: 0
-    StartingHealth: 2
+    SpawnLevel: 3
+    StartingHealth: 15
     MinedItemId: 

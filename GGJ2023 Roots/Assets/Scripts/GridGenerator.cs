@@ -72,12 +72,11 @@ public class GridGenerator : MonoBehaviour
 
         List<GridCell> eligible = new List<GridCell>();
         
-
         _gridDepthDictionary.TryGetValue(data.Level, out eligible);
-        eligible.Add(data.GroundCellPrefab);
+        //eligible.Add(data.GroundCellPrefab);
 
-        //if (eligible.Count == 0)
-        //    return data.GroundCellPrefab;
+        if (eligible.Count == 0)
+            return data.GroundCellPrefab;
 
         // Temp
         return eligible[Random.Range(0, eligible.Count)];

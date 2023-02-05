@@ -24,6 +24,11 @@ public class PlayerControl : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody _rb;
 
+    bool _isBoosting = false;
+    bool _upPressed = false;
+    bool _downPressed = false;
+    bool _leftPressed = false;
+    bool _rightPressed = false;
     DepthLevel _currentDepthLevel = DepthLevel.GroundLevel;
 
     public MineMachine MineMachine { get { return _mineMachine; } }
@@ -54,6 +59,14 @@ public class PlayerControl : MonoBehaviour
 
     private void Update()
     {
+        _upPressed = KeyIsPressed(UP_KEY);
+        _downPressed = KeyIsPressed(DOWN_KEY);
+        _rightPressed = KeyIsPressed(RIGHT_KEY);
+        _leftPressed = KeyIsPressed(LEFT_KEY);
+    }
+
+    private void FixedUpdate()
+    {
         DepthLevel currentLevel = GetCurrentDepthLevel();
         if (currentLevel != _currentDepthLevel)
         {
@@ -64,7 +77,8 @@ public class PlayerControl : MonoBehaviour
             {
                 // Deeper, add new audio
                 AudioManager.Instance.FadeAudioForDepth(true, currentLevel);
-            } else
+            }
+            else
             {
                 // Higher, remove previous audio
                 AudioManager.Instance.FadeAudioForDepth(false, _currentDepthLevel);
@@ -91,7 +105,7 @@ public class PlayerControl : MonoBehaviour
             return;
         }
 
-        if (KeyIsPressed(UP_KEY))
+        if (_upPressed)
         {
             // Fire booster
             float forceStrength = _mineMachine.GetBoosterForce() * Time.deltaTime;
@@ -99,20 +113,22 @@ public class PlayerControl : MonoBehaviour
             velocity.y = boostForce.y;
             isBoosting = true;
             fuelToBurn = fuelBurnRate * 1.5f;
-        } else if (KeyIsPressed(DOWN_KEY))
+        }
+        else if (_downPressed)
         {
             direction = MineDirection.Down;
             fuelToBurn = fuelBurnRate;
         }
 
-        if (KeyIsPressed(LEFT_KEY))
+        if (_leftPressed)
         {
             velocity += Vector3.left * moveSpeed * Time.deltaTime;
             direction = MineDirection.Left;
 
             if (!isBoosting)
                 fuelToBurn = fuelBurnRate;
-        } else if (KeyIsPressed(RIGHT_KEY))
+        }
+        else if (_rightPressed)
         {
             velocity += Vector3.right * moveSpeed * Time.deltaTime;
             direction = MineDirection.Right;
@@ -123,6 +139,17 @@ public class PlayerControl : MonoBehaviour
 
         if (isBoosting || direction != MineDirection.NONE)
             _mineMachine.BurnFuel(fuelToBurn);
+
+        if (isBoosting && !_isBoosting)
+        {
+            _mineMachine.ToggleBoosters(true);
+        }
+        else if (!isBoosting && _isBoosting)
+        {
+            _mineMachine.ToggleBoosters(false);
+        }
+
+        _isBoosting = isBoosting;
 
         if (direction != MineDirection.NONE)
         {
@@ -147,7 +174,8 @@ public class PlayerControl : MonoBehaviour
         if (elevation > 0f)
         {
             _mineMachine.Refuel();
-        } else
+        }
+        else
         {
             _mineMachine.StopRefuel();
         }
