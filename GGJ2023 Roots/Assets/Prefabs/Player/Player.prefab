@@ -1316,6 +1316,11 @@ MonoBehaviour:
   _baseFuelBurnRate: 0.01
   _refuelRate: 0.2
   _drillAnchor: {fileID: 7666851433141040788}
+  _wheels:
+  - {fileID: 1165311028588124589}
+  - {fileID: 4483580179008840528}
+  - {fileID: 8949302433465695232}
+  - {fileID: 7887513143888802323}
   _collider: {fileID: 4880642641042938825}
   _upgradesDisplay: {fileID: 8064661811996514006}
   MoveSpeedMultiplier: 1
