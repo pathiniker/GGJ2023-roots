@@ -234,7 +234,7 @@ public class MineMachine : MonoBehaviour
         }
 
         _currency += currencyToGain;
-        Debug.Log($"Gain {currencyToGain} coins");
+        //Debug.Log($"Gain {currencyToGain} coins");
 
         if (currencyToGain > 0)
             _shouldReRollUpgrades = true;

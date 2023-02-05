@@ -819,7 +819,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 75
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1783,10 +1783,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 619ac553d24a0944bb50b18bddc4c641,
+        type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 619ac553d24a0944bb50b18bddc4c641,
         type: 3}
       propertyPath: m_Name
       value: Tree1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 619ac553d24a0944bb50b18bddc4c641,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 619ac553d24a0944bb50b18bddc4c641, type: 3}

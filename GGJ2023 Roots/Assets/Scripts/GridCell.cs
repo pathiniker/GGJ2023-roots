@@ -65,22 +65,22 @@ public class GridCell : MonoBehaviour
         float durationPer = duration / count;
         foreach (RockFragment f in prefabs)
         {
-            float jump = Random.Range(0.5f, 1.5f);
-            float scale = Random.Range(0.25f, 1.2f);
-            scale *= 2f;
+            float jump = Random.Range(0.1f, 1f);
+            float scale = Random.Range(0.3f, 1.3f);
+            scale *= 3f;
             float fragDuration = duration * jump * 2f;
             Vector3 punch = new Vector3(scale, scale, scale);
 
             RockFragment fragment = Instantiate(f, transform);
             spawned.Add(fragment);
             fragment.transform.localScale = Vector3.zero;
+            Vector3 pos = fragment.transform.localPosition;
+            pos.z -= 0.8f;
+            fragment.transform.localPosition = new Vector3(Mathf.Lerp(pos.x - 0.5f, pos.x + 0.5f, Random.Range(0f, 1f)), pos.y, pos.z);
             fragment.SyncTo(Data.MinedItemId);
             fragment.transform.SetParent(GameController.Instance.MineMachine.transform);
 
             fragment.transform.DOPunchScale(punch, fragDuration);
-            //Vector3 jumpToPosition = GameController.Instance.MineMachine.transform.position;
-            //jumpToPosition.z -= 0.6f;
-            //fragment.transform.DOJump(jumpToPosition, jump, 1, duration * jump * 2f);
             fragment.transform.DOLocalJump(Vector3.zero, jump, 1, fragDuration);
 
             yield return new WaitForSeconds(durationPer / 2f);
