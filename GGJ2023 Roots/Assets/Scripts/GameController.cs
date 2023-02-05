@@ -9,9 +9,11 @@ public class GameController : MonoBehaviour
     [Header("Components")]
     [SerializeField] PlayerControl _player;
     [SerializeField] MineMachine _mineMachine;
+    [SerializeField] GridGenerator _gridGenerator;
 
     public PlayerControl Player { get { return _player; } }
     public MineMachine MineMachine { get { return _player.MineMachine; } }
+    public GridGenerator GridGenerator { get { return _gridGenerator; } }
 
     private void Awake()
     {

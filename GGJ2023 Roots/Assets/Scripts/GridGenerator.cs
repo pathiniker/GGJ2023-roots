@@ -8,6 +8,7 @@ public class DepthData
 {
     public DepthLevel Level;
     public int DepthY;
+    public GridCell GroundCellPrefab;
 
     public DepthData(DepthLevel level, int y)
     {
@@ -31,6 +32,7 @@ public class GridGenerator : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] GridCell _standardCell;
     [SerializeField] List<GridCell> _oreCells = new List<GridCell>();
+    [SerializeField] List<RockFragment> _fragmentPrefabs = new List<RockFragment>();
 
     Dictionary<DepthLevel, List<GridCell>> _gridDepthDictionary = new Dictionary<DepthLevel, List<GridCell>>();
 
@@ -59,7 +61,7 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
-    GridCell GetCellToSpawn(DepthLevel level)
+    GridCell GetCellToSpawn(DepthData data)
     {
         float chance = Random.Range(0f, 1f);
 
@@ -69,9 +71,9 @@ public class GridGenerator : MonoBehaviour
         }
 
         List<GridCell> eligible = new List<GridCell>();
-        eligible.Add(_standardCell);
+        eligible.Add(data.GroundCellPrefab);
 
-        _gridDepthDictionary.TryGetValue(level, out eligible);
+        _gridDepthDictionary.TryGetValue(data.Level, out eligible);
 
         // Temp
         return eligible[Random.Range(0, eligible.Count)];
@@ -90,6 +92,21 @@ public class GridGenerator : MonoBehaviour
         }
 
         return result;
+    }
+
+    public List<RockFragment> GetRockFragmentPrefabs(int count)
+    {
+        List<RockFragment> prefabs = new List<RockFragment>();
+
+        if (_fragmentPrefabs.Count == 0)
+            return prefabs;
+
+        for (int i = 0; i < count; i++)
+        {
+            prefabs.Add(_fragmentPrefabs[Random.Range(0, _fragmentPrefabs.Count)]);
+        }
+
+        return prefabs;
     }
 
     public DepthLevel GetCurrentDepthLevel()
@@ -112,7 +129,7 @@ public class GridGenerator : MonoBehaviour
             for (int x = 0; x < _gridWidth; x++)
             {
                 Vector3 pos = new Vector3(x + xOffset, -y, 0);
-                GridCell cell = Instantiate(GetCellToSpawn(depthData.Level), _gridParent);
+                GridCell cell = Instantiate(GetCellToSpawn(depthData), _gridParent);
                 cell.transform.position = pos;
             }
         }
