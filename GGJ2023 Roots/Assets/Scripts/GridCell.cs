@@ -49,13 +49,16 @@ public class GridCell : MonoBehaviour
             _isShattering = true;
         }
         else
+        {
+            AudioManager.Instance.PlayBreakDirtSfx();
             Destroy(gameObject);
+        }
     }
 
     public IEnumerator DoShatter(System.Action onCompleteCb = null)
     {
         float duration = 0.35f;
-        int count = 5;
+        int count = Random.Range(2, 6);
 
         AudioManager.Instance.PlayBreakCellSfx();
 
@@ -88,6 +91,7 @@ public class GridCell : MonoBehaviour
 
         yield return new WaitForSeconds(duration / count);
         GameController.Instance.MineMachine.AddItemToInventory(Data.MinedItemId, count);
+        AudioManager.Instance.PlayCollectOreSfx();
 
         for (int i = 0; i < spawned.Count; i++)
         {

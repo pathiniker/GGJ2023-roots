@@ -50,16 +50,18 @@ public class MineMachine : MonoBehaviour
 
     Dictionary<string, int> _inventory = new Dictionary<string, int>();
 
+    public int Currency { get { return _currency; } }
+
     private void Start()
     {
         _bounds = _collider.bounds.extents;
         CurrentFuelCapacity = _baseFuelCapacity;
         CurrentStorageCapacity = _baseStorageCapacity;
-        RemainingFuel = CurrentFuelCapacity;
+        RemainingFuel = CurrentFuelCapacity * 0.25f;
         _upgradesDisplay.Show(false);
 
         ToggleBoosters(false);
-        UiController.Instance.SetFuelDisplay(1f);
+        UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
         UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
     }
 
@@ -164,13 +166,10 @@ public class MineMachine : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, _bounds.y + 0.5f);
     }
 
-    public void Refuel(bool doInstant = false)
+    public void Refuel(bool doInstant = false, bool showText = false)
     {
         if (_isRefueling)
             return;
-
-        //RemainingFuel = CurrentFuelCapacity;
-        //UiController.Instance.SetFuelDisplay(1f);
 
         if (doInstant)
         {
@@ -178,7 +177,7 @@ public class MineMachine : MonoBehaviour
             UiController.Instance.SetFuelDisplay(1f);
         } else
         {
-            StartCoroutine(DoRefuel());
+            StartCoroutine(DoRefuel(showText));
         }
     }
 
@@ -187,12 +186,19 @@ public class MineMachine : MonoBehaviour
         if (string.IsNullOrEmpty(id))
             return;
 
+        int availableCapacity = CurrentStorageCapacity - GetCurrentWeight();
+        if (availableCapacity - qty < 0)
+            qty = availableCapacity;
+
         if (GetCurrentWeight() >= CurrentStorageCapacity)
         {
             // TODO: Alert storage is full!
             Debug.LogWarning("Storage full! (Create UI)");
+            StoryController.Instance.DisplayStorageFullWarning();
             return;
         }
+
+        StoryController.Instance.DisplayText($"+ {qty} {id}");
 
         if (_inventory.ContainsKey(id))
         {
@@ -237,7 +243,18 @@ public class MineMachine : MonoBehaviour
         //Debug.Log($"Gain {currencyToGain} coins");
 
         if (currencyToGain > 0)
+        {
             _shouldReRollUpgrades = true;
+            StoryController.Instance.DisplayCoinsGained(currencyToGain);
+        } else
+        {
+            string nothingText = "Nothing to sell.";
+            if (_currency <= 0)
+                nothingText += "... nothing to buy.";
+
+            StoryController.Instance.DisplayText(nothingText);
+        }
+            
 
         UiController.Instance.SyncCurrencyDisplay(_currency);
         UiController.Instance.SetStorageCapacity(0, CurrentStorageCapacity);
@@ -279,7 +296,7 @@ public class MineMachine : MonoBehaviour
         onCompletePurchaseCb?.Invoke();
     }
 
-    IEnumerator DoRefuel()
+    IEnumerator DoRefuel(bool showText = false)
     {
         _isRefueling = true;
         float rateMultiplier = 1f;
@@ -295,6 +312,9 @@ public class MineMachine : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
             yield return null;
         }
+
+        if (showText)
+            StoryController.Instance.DisplayText("Refueled.");
 
         yield break;
     }
@@ -366,6 +386,9 @@ public class MineMachine : MonoBehaviour
             rotValue *= 2f;
         else if (_isMining)
             rotValue *= 0.1f;
+
+        float engineMultiplyer = isGrounded ? 1f : 1.8f;
+        AudioManager.Instance.NotifyEngineMoving(true, engineMultiplyer);
 
         for (int i = 0; i < _wheels.Count; i++)
         {

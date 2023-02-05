@@ -179,24 +179,25 @@ public class PlayerControl : MonoBehaviour
                 case MineDirection.Right:
                     _mineMachine.DoWheelRotation(direction, isGrounded);
                     break;
+
+                case MineDirection.Up:
+                    AudioManager.Instance.NotifyEngineMoving(false);
+                    break;
             }
 
             if (isGrounded)
                 _mineMachine.TryMine();
+        } else
+        {
+            AudioManager.Instance.NotifyEngineMoving(false);
         }
+
+        AudioManager.Instance.PlayGroundMovementSfx(isGrounded && (direction == MineDirection.Left || direction == MineDirection.Right));
 
         _rb.velocity = velocity;
 
         float elevation = transform.position.y;
         UiController.Instance.SetElevationText(elevation);
-        if (elevation > 0f)
-        {
-            _mineMachine.Refuel();
-        }
-        else
-        {
-            _mineMachine.StopRefuel();
-        }
 
         _isGrounded = isGrounded;
     }

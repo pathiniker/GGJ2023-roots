@@ -66,9 +66,7 @@ public class GridGenerator : MonoBehaviour
         }
 
         List<GridCell> eligible = new List<GridCell>();
-        
         _gridDepthDictionary.TryGetValue(data.Level, out eligible);
-        //eligible.Add(data.GroundCellPrefab);
 
         if (eligible.Count == 0)
             return data.GroundCellPrefab;
@@ -87,6 +85,9 @@ public class GridGenerator : MonoBehaviour
     public DepthData GetDepthDataForY(int y)
     {
         DepthData result = _depthLevels[0];
+
+        if (y > 0)
+            return result;
 
         foreach (DepthData data in _depthLevels)
         {
@@ -136,6 +137,6 @@ public class GridGenerator : MonoBehaviour
             }
         }
 
-        Debug.Log("Generated grid");
+        Debug.Log($"Generated grid <i>({_gridWidth} x {_gridHeight})</i>");
     }
 }

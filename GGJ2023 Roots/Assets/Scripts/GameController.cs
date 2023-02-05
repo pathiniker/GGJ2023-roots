@@ -30,6 +30,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Start!");
+        Debug.Log("<b>Start!</b>");
     }
 }
