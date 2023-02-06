@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 3168699339655772253}
   - component: {fileID: 7244341710882873704}
   - component: {fileID: 322963771772638612}
+  - component: {fileID: 4450998280659332728}
   m_Layer: 0
   m_Name: Option Text
   m_TagString: Untagged
@@ -219,6 +220,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &4450998280659332728
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294283033786551952}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &460521335331841330
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +387,7 @@ GameObject:
   - component: {fileID: 1972487859824621984}
   - component: {fileID: 8375385305054862015}
   - component: {fileID: 761616143443977683}
+  - component: {fileID: 7162748212078241547}
   m_Layer: 0
   m_Name: Cost Text
   m_TagString: Untagged
@@ -499,6 +513,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &7162748212078241547
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156452927206833626}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1165311028588124589
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +721,7 @@ GameObject:
   - component: {fileID: 2929127961047659438}
   - component: {fileID: 4009549498250384567}
   - component: {fileID: 7665571044145528609}
+  - component: {fileID: 421336862694083216}
   m_Layer: 0
   m_Name: Option Text
   m_TagString: Untagged
@@ -820,6 +847,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &421336862694083216
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685581588460305955}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2148779704024742181
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,6 +1107,7 @@ GameObject:
   - component: {fileID: 865265601852514441}
   - component: {fileID: 8167929039415664427}
   - component: {fileID: 917131909454199658}
+  - component: {fileID: 4757898690979991634}
   m_Layer: 0
   m_Name: Cost Text
   m_TagString: Untagged
@@ -1193,6 +1233,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &4757898690979991634
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2624157597064220018}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2718955565943414162
 GameObject:
   m_ObjectHideFlags: 0
@@ -2375,6 +2427,7 @@ GameObject:
   - component: {fileID: 4573963974969764381}
   - component: {fileID: 8891259344613782066}
   - component: {fileID: 7600621500809431692}
+  - component: {fileID: 1825653371591645805}
   m_Layer: 0
   m_Name: Option Text
   m_TagString: Untagged
@@ -2500,6 +2553,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &1825653371591645805
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5841090486048942379}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &6384002101638163633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3102,6 +3167,7 @@ GameObject:
   - component: {fileID: 2794266357207654276}
   - component: {fileID: 4357435211135417661}
   - component: {fileID: 8938202243658349679}
+  - component: {fileID: 697941308106475205}
   m_Layer: 0
   m_Name: Cost Text
   m_TagString: Untagged
@@ -3227,6 +3293,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!225 &697941308106475205
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7648632121615299690}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7666851433141040788
 GameObject:
   m_ObjectHideFlags: 0

@@ -157,8 +157,8 @@ public class EvilTree : MonoBehaviour
 
         if (Health <= 0)
         {
-            _startedDeathSequence = true;
             DoDeathSequence();
+            _startedDeathSequence = true;
         }
     }
 }

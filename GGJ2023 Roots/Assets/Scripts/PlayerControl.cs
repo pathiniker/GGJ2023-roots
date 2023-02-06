@@ -66,9 +66,14 @@ public class PlayerControl : MonoBehaviour
         _rightPressed = KeyIsPressed(RIGHT_KEY);
         _leftPressed = KeyIsPressed(LEFT_KEY);
 
-        if (KeyIsPressed(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             StoryController.Instance.TriggerEndGame();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            UiController.Instance.ShowStartScreen(false);
         }
     }
 

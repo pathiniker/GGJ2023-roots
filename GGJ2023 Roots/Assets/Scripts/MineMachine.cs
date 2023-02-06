@@ -331,7 +331,7 @@ public class MineMachine : MonoBehaviour
     public void UpgradeDrill()
     {
         DrillLevel += 1;
-        StoryController.Instance.DisplayText($"Drill upgraded to level 2.");
+        StoryController.Instance.DisplayText($"Drill upgraded to level {DrillLevel}.");
     }
 
     public void UpgradeFuel()

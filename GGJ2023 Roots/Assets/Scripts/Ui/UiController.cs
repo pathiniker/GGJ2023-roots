@@ -16,6 +16,7 @@ public class UiController : MonoBehaviour
     [SerializeField] UI_MachineHud _hud;
     [SerializeField] TextMeshProUGUI _depthLevelNameText;
     [SerializeField] UI_BossFight _bossFight;
+    [SerializeField] GameObject _startScreen;
 
     public UI_BossFight BossFight { get { return _bossFight; } }
 
@@ -32,6 +33,12 @@ public class UiController : MonoBehaviour
         }
 
         _bossFight.gameObject.SetActive(false);
+        ShowStartScreen(true);
+    }
+
+    public void ShowStartScreen(bool show)
+    {
+        _startScreen.gameObject.SetActive(show);
     }
 
     public void SetElevationText(float elevation)
