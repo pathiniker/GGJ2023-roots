@@ -9,4 +9,5 @@ public class MinedItemData
     public float Weight = 1f;
     public int CurrencyValue = 1;
     public Color ItemColor = Color.white;
+    public int RequiredDrillLevel = 1;
 }

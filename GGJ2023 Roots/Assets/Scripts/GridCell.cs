@@ -100,6 +100,24 @@ public class GridCell : MonoBehaviour
 
         spawned.Clear();
 
+        if (Data.MinedItemId == "Gold" && !GameController.Instance.MineMachine.HasMinedGold)
+        {
+            yield return new WaitForSeconds(1f);
+            StoryController.Instance.DisplayText($"There is something greater than gold down here...");
+            GameController.Instance.MineMachine.HasMinedGold = true;
+
+            yield return new WaitForSeconds(0.8f);
+            StoryController.Instance.DisplayText("Find it for me.");
+        }
+
+        if (Data.MinedItemId == "Tree Heart")
+        {
+            yield return new WaitForSeconds(1f);
+            StoryController.Instance.DisplayText("You found it...");
+            yield return new WaitForSeconds(1f);
+            StoryController.Instance.DisplayText("Now return it.");
+        }
+
         onCompleteCb?.Invoke();
         Destroy(gameObject);
         yield break;

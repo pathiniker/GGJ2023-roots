@@ -22,6 +22,9 @@ public class HomeBase : MonoBehaviour
 
     void HandlePlayerReturn()
     {
+        if (StoryController.Instance.BeganEndGame)
+            return;
+
         GameController.Instance.MineMachine.SellInventory();
         bool canBuy = GameController.Instance.MineMachine.Currency > 0;
         GameController.Instance.MineMachine.ShowUpgradesDisplay(canBuy);

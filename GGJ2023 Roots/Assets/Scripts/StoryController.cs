@@ -15,6 +15,7 @@ public class StoryController : MonoBehaviour
     [SerializeField] TextMeshProUGUI _messageText;
 
     bool _hasSoldOre = false;
+    public bool BeganEndGame = false;
 
     private void Awake()
     {
@@ -101,16 +102,48 @@ public class StoryController : MonoBehaviour
         _hasSoldOre = true;
     }
 
+    public void TriggerEndGame()
+    {
+        if (BeganEndGame)
+            return;
+
+        BeganEndGame = true;
+        StartCoroutine(StartEndGameSequence());
+    }
+
+    IEnumerator StartEndGameSequence()
+    {
+        Debug.Log("Start end game sequence");
+        float waitEach = 4f;
+
+        GameController.Instance.HomeBase.transform.DOScale(Vector3.zero, waitEach);
+        GameController.Instance.MineMachine.ShowUpgradesDisplay(false);
+
+        yield return new WaitForSeconds(waitEach);
+        DisplayText($"You found it...");
+
+        yield return new WaitForSeconds(waitEach);
+        DisplayText($"Let me repay you for destroying my land...");
+
+        yield return new WaitForSeconds(waitEach);
+        CameraController.Instance.Camera.DOShakePosition(waitEach, 1);
+        // START FIGHT
+        GameController.Instance.EvilTree.FightPlayer();
+
+        yield break;
+    }
+
     public void DisplayText(string text)
     {
-        StopCoroutine(DoText(""));
+        _messageText.DOPause();
         _messageText.DOKill();
+        StopCoroutine(DoText(""));
         StartCoroutine(DoText(text));
     }
 
     IEnumerator DoText(string text, System.Action onCompleteCb = null)
     {
-        float writeDuration = 1.1f;
+        float writeDuration = 0.9f;
         float holdDuration = 3f;
 
         _messageText.DOFade(0.8f, 0.15f);
@@ -120,7 +153,7 @@ public class StoryController : MonoBehaviour
         //_messageText.DOText("", writeDuration);
         _messageText.DOFade(0f, writeDuration - 0.2f);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         _messageText.SetText("");
 
         onCompleteCb?.Invoke();

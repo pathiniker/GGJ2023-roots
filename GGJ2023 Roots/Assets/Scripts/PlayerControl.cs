@@ -37,6 +37,7 @@ public class PlayerControl : MonoBehaviour
     private void Start()
     {
         _rb.useGravity = true;
+        UiController.Instance.SetDepthLevelName("Surface");
     }
 
     bool KeyIsPressed(KeyCode key)
@@ -64,14 +65,23 @@ public class PlayerControl : MonoBehaviour
         _downPressed = KeyIsPressed(DOWN_KEY);
         _rightPressed = KeyIsPressed(RIGHT_KEY);
         _leftPressed = KeyIsPressed(LEFT_KEY);
+
+        if (KeyIsPressed(KeyCode.P))
+        {
+            StoryController.Instance.TriggerEndGame();
+        }
     }
 
     private void FixedUpdate()
     {
+        if (!_mineMachine.CanMove)
+            return;
+
         DepthData currentLevel = GetCurrentDepthData();
-        UiController.Instance.SetDepthLevelName(currentLevel.LevelName);
+        
         if (currentLevel.Level != _currentDepthLevel)
         {
+            UiController.Instance.SetDepthLevelName(currentLevel.LevelName);
             int previousIdx = (int)_currentDepthLevel;
             int newIdx = (int)currentLevel.Level;
 

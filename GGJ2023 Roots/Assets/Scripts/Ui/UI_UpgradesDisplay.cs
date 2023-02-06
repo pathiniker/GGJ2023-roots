@@ -14,30 +14,46 @@ public class UI_UpgradesDisplay : MonoBehaviour
 
     public void ReRollOptions()
     {
-        //Debug.lo
+        int drillLevel = GameController.Instance.MineMachine.DrillLevel;
+        bool offerDrillUpgrade = drillLevel < MineMachine.MAX_DRILL_LEVEL;
+
+        int showOptions = 3; // Make dynamic
+
         for (int i = 0; i < _optionButtons.Count; i++)
         {
+            UI_UpgradeOption option = _optionButtons[i];
+
             System.Action cb = null;
             System.Action completePurchaseCb = null;
             string label = "";
             int cost = 0;
 
+            bool showOption = i < showOptions;
+
+            if (i == 0 && !offerDrillUpgrade)
+                showOption = false;
+
+            option.gameObject.SetActive(showOption);
+
+            if (!showOption)
+                continue;
+
             switch (i)
             {
                 case 0: // Drill
-                    label = "Drill+";
-                    cost = 25;
+                    label = "Upgrade Drill";
+                    cost = 100 * drillLevel;
                     completePurchaseCb += () => GameController.Instance.MineMachine.UpgradeDrill();
                     break;
 
                 case 1: // Storage
-                    label = "Storage+";
+                    label = "Increase Storage";
                     cost = 15;
                     completePurchaseCb += () => GameController.Instance.MineMachine.UpgradeStorage();
                     break;
 
                 case 2: // Fuel
-                    label = "Fuel+";
+                    label = "Upgrade Fuel";
                     cost = 20;
                     completePurchaseCb += () => GameController.Instance.MineMachine.UpgradeFuel();
                     break;
@@ -48,7 +64,6 @@ public class UI_UpgradesDisplay : MonoBehaviour
 
             cb += () => GameController.Instance.MineMachine.SpendCurrency(cost, completePurchaseCb);
 
-            UI_UpgradeOption option = _optionButtons[i];
             option.SyncTo(label, cost, cb);
         }
     }

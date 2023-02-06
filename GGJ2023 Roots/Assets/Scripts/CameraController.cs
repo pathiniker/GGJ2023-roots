@@ -15,6 +15,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] Camera _camera;
     [SerializeField] GameObject _followObject;
 
+    public Camera Camera { get { return _camera; } }
+
     private void Awake()
     {
         if (Instance == null)

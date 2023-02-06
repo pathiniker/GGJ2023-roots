@@ -29,9 +29,15 @@ public class FuelStation : MonoBehaviour
 
         if (!_hasRefueled)
         {
-            StoryController.Instance.PlayNextStoryStep();
+            StartCoroutine(ShowStoryMessage());
         }
 
         _hasRefueled = true;
+    }
+
+    IEnumerator ShowStoryMessage()
+    {
+        yield return new WaitForSeconds(1f);
+        StoryController.Instance.PlayNextStoryStep();
     }
 }

@@ -78,6 +78,10 @@ public class AudioManager : MonoBehaviour
     public void FadeAudioForDepth(bool on, DepthLevel level)
     {
         AudioSource src = GetAudioSrcForLevel(level);
+
+        if (src == null)
+            return;
+
         float fadeTime = 5f;
         float maxVolume = 0.85f;
         src.DOFade(on ? maxVolume : 0f, fadeTime);
@@ -91,6 +95,14 @@ public class AudioManager : MonoBehaviour
         float pitch = Random.Range(0.8f, 1.2f);
         _sfx.pitch = pitch;
         _sfx.PlayOneShot(_breakDirtSfx[Random.Range(0, _breakDirtSfx.Count - 1)]);
+    }
+
+    public void PlayBossMusic()
+    {
+        foreach (DepthLevel d in System.Enum.GetValues(typeof(DepthLevel)))
+        {
+            FadeAudioForDepth(true, d);
+        }
     }
 
     public void PlayCollectOreSfx()

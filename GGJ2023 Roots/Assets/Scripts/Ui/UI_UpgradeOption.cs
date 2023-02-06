@@ -23,6 +23,8 @@ public class UI_UpgradeOption : MonoBehaviour
     {
         _onClickCb?.Invoke();
         _onClickCb = null;
+
+        gameObject.SetActive(false);
     }
     #endregion
 }

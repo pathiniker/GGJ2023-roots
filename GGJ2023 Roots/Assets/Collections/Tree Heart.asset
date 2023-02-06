@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ff400e1287199c40bf915c19191041c, type: 3}
-  m_Name: Silver Ore
+  m_Name: Tree Heart
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -22,8 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Data:
-    ItemId: Silver
+    ItemId: Tree Heart
     Weight: 1
-    CurrencyValue: 25
-    ItemColor: {r: 0.63857245, g: 0.77214456, b: 0.7735849, a: 1}
-    RequiredDrillLevel: 2
+    CurrencyValue: 0
+    ItemColor: {r: 0.6509434, g: 0.19344072, b: 0.21339813, a: 1}
+    RequiredDrillLevel: 3

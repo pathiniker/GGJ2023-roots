@@ -26,9 +26,14 @@ public class GridGenerator : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] GridCell _standardCell;
+    [SerializeField] GridCell _heartCell;
     [SerializeField] List<GridCell> _oreCells = new List<GridCell>();
     [SerializeField] List<RockFragment> _fragmentPrefabs = new List<RockFragment>();
 
+    bool _spawnedHeart = false;
+    float _heartSpawnChance = 0.05f;
+    int _maxHeartSpawnTries = 20;
+    int _heartSpawnTries = 0;
     Dictionary<DepthLevel, List<GridCell>> _gridDepthDictionary = new Dictionary<DepthLevel, List<GridCell>>();
 
     private void Awake()
@@ -67,6 +72,25 @@ public class GridGenerator : MonoBehaviour
 
         List<GridCell> eligible = new List<GridCell>();
         _gridDepthDictionary.TryGetValue(data.Level, out eligible);
+
+        if (data.Level == DepthLevel.TierFive)
+        {
+            if (!_spawnedHeart)
+            {
+                float heartRoll = Random.Range(0f, 1f);
+                if (heartRoll <= _heartSpawnChance)
+                {
+                    return _heartCell;
+                } else
+                {
+                    if (_heartSpawnTries > _maxHeartSpawnTries)
+                        return _heartCell;
+
+                    _heartSpawnChance *= 2f;
+                    _heartSpawnTries++;
+                }
+            }
+        }
 
         if (eligible.Count == 0)
             return data.GroundCellPrefab;
@@ -128,6 +152,15 @@ public class GridGenerator : MonoBehaviour
             {
                 Vector3 pos = new Vector3(x + xOffset, -y, 0);
                 GridCell prefab = GetCellToSpawn(depthData, lastWasNull);
+
+                if (prefab != null)
+                {
+                    if (prefab.Data.MinedItemId == "Tree Heart")
+                    {
+                        _spawnedHeart = true;
+                    }
+                }
+
                 lastWasNull = prefab == null;
                 if (prefab == null)
                     continue;

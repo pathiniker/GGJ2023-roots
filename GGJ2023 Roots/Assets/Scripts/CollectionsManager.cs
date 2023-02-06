@@ -28,6 +28,9 @@ public class CollectionsManager : MonoBehaviour
 
     public MinedItemData GetMinedItemDataById(string id)
     {
+        if (string.IsNullOrEmpty(id))
+            return null;
+
         _minedItemDictionary.TryGetValue(id, out MinedItemData data);
         Debug.Assert(data != null, $"Failed to find MinedItemData by ID: {id}");
         return data;

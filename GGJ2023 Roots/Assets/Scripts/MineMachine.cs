@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class MineMachine : MonoBehaviour
 {
+    public const int MAX_DRILL_LEVEL = 3;
+
     [Header("Settings")]
     [SerializeField] float _baseMoveSpeed = 200f;
     [SerializeField] float _baseBoosterForce = 200f;
@@ -30,6 +32,7 @@ public class MineMachine : MonoBehaviour
 
     [Header("FX Prefabs")]
     [SerializeField] GameObject _sparkPrefab;
+    [SerializeField] GameObject _deathPrefab;
 
     bool _isRefueling = false;
     bool _shouldReRollUpgrades = true;
@@ -40,13 +43,16 @@ public class MineMachine : MonoBehaviour
     MineDirection _currentDirection;
 
     [Header("Run Time Miner Stats")]
+    public int DrillLevel = 1;
     public float MoveSpeedMultiplier = 1f;
     public float BoosterForceMultiplier = 1f;
-    public float MineStrengthMultiplier = 1f;
     public float CurrentFuelCapacity;
     public int CurrentStorageCapacity;
 
     public float RemainingFuel;
+    public bool ShouldNotifyFuel = false;
+    public bool HasMinedGold = false;
+    public bool CanMove = true;
 
     Dictionary<string, int> _inventory = new Dictionary<string, int>();
 
@@ -59,6 +65,7 @@ public class MineMachine : MonoBehaviour
         CurrentStorageCapacity = _baseStorageCapacity;
         RemainingFuel = CurrentFuelCapacity * 0.25f;
         _upgradesDisplay.Show(false);
+        ShouldNotifyFuel = false;
 
         ToggleBoosters(false);
         UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
@@ -97,7 +104,7 @@ public class MineMachine : MonoBehaviour
 
     public float GetMineStrength()
     {
-        return _baseMineStrength * MineStrengthMultiplier;
+        return _baseMineStrength * DrillLevel;
     }
 
     public float GetNormalizedFuelLevel()
@@ -161,6 +168,57 @@ public class MineMachine : MonoBehaviour
         return null;
     }
 
+    EvilTree GetEvilTreeContact(MineDirection direction)
+    {
+        if (direction == MineDirection.NONE)
+            return null;
+
+        float checkDistance = 0f;
+        float contactBufferDistance = 0.35f;
+        Vector3 vectorDirection = Vector3.zero;
+
+        switch (direction)
+        {
+            case MineDirection.Right:
+                checkDistance = _bounds.x;
+                vectorDirection = Vector3.right;
+                break;
+
+            case MineDirection.Left:
+                checkDistance = _bounds.x;
+                vectorDirection = Vector3.left;
+                break;
+
+            case MineDirection.Up:
+                checkDistance = _bounds.y;
+                vectorDirection = Vector3.up;
+                contactBufferDistance = 0.5f;
+                break;
+
+            case MineDirection.Down:
+                checkDistance = _bounds.y;
+                vectorDirection = Vector3.down;
+                contactBufferDistance = 0.5f;
+                break;
+        }
+
+        RaycastHit hit;
+        float hitDistance = checkDistance + contactBufferDistance;
+        if (Physics.Raycast(transform.position, vectorDirection, out hit, hitDistance))
+        {
+            Debug.DrawRay(transform.position, vectorDirection * hitDistance, Color.yellow);
+            EvilTree tree = hit.collider.GetComponentInParent<EvilTree>();
+
+            if (tree != null)
+            {
+                //Debug.Log($"Hit cell: {cell.name}");
+                return tree;
+            }
+        }
+
+        return null;
+    }
+
     public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, _bounds.y + 0.5f);
@@ -192,8 +250,6 @@ public class MineMachine : MonoBehaviour
 
         if (GetCurrentWeight() >= CurrentStorageCapacity)
         {
-            // TODO: Alert storage is full!
-            Debug.LogWarning("Storage full! (Create UI)");
             StoryController.Instance.DisplayStorageFullWarning();
             return;
         }
@@ -206,6 +262,11 @@ public class MineMachine : MonoBehaviour
         } else
         {
             _inventory.Add(id, qty);
+        }
+
+        if (GetCurrentWeight() >= CurrentStorageCapacity)
+        {
+            StoryController.Instance.DisplayStorageFullWarning();
         }
 
         UiController.Instance.SyncStorageDisplay(_inventory, GetCurrentWeight(), CurrentStorageCapacity);
@@ -233,8 +294,15 @@ public class MineMachine : MonoBehaviour
             if (data == null)
                 continue;
 
-            currencyToGain += data.CurrencyValue;
+            currencyToGain += data.CurrencyValue * item.Value;
 
+            if (data.ItemId == "Tree Heart")
+            {
+                // TRIGGER BATTLE
+                StoryController.Instance.TriggerEndGame();
+                _inventory.Clear();
+                return;
+            }
             // TODO:
             // Animate each sell item
         }
@@ -248,13 +316,12 @@ public class MineMachine : MonoBehaviour
             StoryController.Instance.DisplayCoinsGained(currencyToGain);
         } else
         {
-            string nothingText = "Nothing to sell.";
-            if (_currency <= 0)
-                nothingText += "... nothing to buy.";
+            string nothingText = "Come back with something to sell.";
+            //if (_currency <= 0)
+            //    nothingText = "... nothing to buy.";
 
             StoryController.Instance.DisplayText(nothingText);
         }
-            
 
         UiController.Instance.SyncCurrencyDisplay(_currency);
         UiController.Instance.SetStorageCapacity(0, CurrentStorageCapacity);
@@ -263,19 +330,22 @@ public class MineMachine : MonoBehaviour
 
     public void UpgradeDrill()
     {
-        MineStrengthMultiplier += 1f;
+        DrillLevel += 1;
+        StoryController.Instance.DisplayText($"Drill upgraded to level 2.");
     }
 
     public void UpgradeFuel()
     {
-        CurrentFuelCapacity += 100;
+        CurrentFuelCapacity *= 2;
         UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
+        StoryController.Instance.DisplayText($"Doubled fuel capacity.");
     }
 
     public void UpgradeStorage()
     {
-        CurrentStorageCapacity += 25;
+        CurrentStorageCapacity *= 2;
         UiController.Instance.SetStorageCapacity(GetCurrentWeight(), CurrentStorageCapacity);
+        StoryController.Instance.DisplayText($"Doubled storage capacity.");
     }
 
     public void StopRefuel()
@@ -300,7 +370,7 @@ public class MineMachine : MonoBehaviour
     {
         _isRefueling = true;
         float rateMultiplier = 1f;
-
+       
         while (RemainingFuel <= CurrentFuelCapacity)
         {
             if (!_isRefueling)
@@ -316,24 +386,80 @@ public class MineMachine : MonoBehaviour
         if (showText)
             StoryController.Instance.DisplayText("Refueled.");
 
+        ShouldNotifyFuel = true;
+
         yield break;
     }
 
     public void BurnFuel(float amount)
     {
         RemainingFuel -= amount;
-        UiController.Instance.SetFuelDisplay(GetNormalizedFuelLevel());
+        float normalizedLevel = GetNormalizedFuelLevel();
+        UiController.Instance.SetFuelDisplay(normalizedLevel);
+
+        if (normalizedLevel <= 0.25f && ShouldNotifyFuel)
+        {
+            ShouldNotifyFuel = false;
+            StoryController.Instance.DisplayText($"Fuel getting low... Turn back soon.");
+        }
+    }
+
+    void TryMineTree()
+    {
+        // Detect if hitting tree
+        EvilTree tree = GetEvilTreeContact(_currentDirection);
+
+        if (tree == null)
+            return;
+
+        float spinRate = 0.1f;
+        float spinMultiplyer = 20f;
+        Vector3 spin = Vector3.back * spinMultiplyer;
+        _drillTip.transform.DOBlendableLocalRotateBy(spin, spinRate, RotateMode.LocalAxisAdd);
+
+        if (_timeSinceLastHit < _hitDelay)
+            return;
+
+        bool doSpark = Random.Range(0f, 1f) < 0.45f;
+
+        if (doSpark)
+            Instantiate(_sparkPrefab, _sparkSpawnPoint); // Destroys self
+
+        // MINE!
+        //Debug.LogWarning($"MINE CELL: {cell.name}");
+        _timeSinceLastHit = 0f;
+        float dmg = GetMineStrength();
+        tree.DealDamage(dmg);
     }
 
     public void TryMine()
     {
+        if (StoryController.Instance.BeganEndGame)
+        {
+            TryMineTree();
+            return;
+        }
+
         // TODO: Check block based on current mine direction
         GridCell cell = GetContactCell(_currentDirection);
 
         _isMining = cell != null;
 
         if (cell == null)
+        {
             return;
+        }
+
+        MinedItemData data = CollectionsManager.Instance.GetMinedItemDataById(cell.Data.MinedItemId);
+
+        if (data != null)
+        {
+            if (data.RequiredDrillLevel > DrillLevel)
+            {
+                StoryController.Instance.DisplayText($"A better drill is required.");
+                return;
+            }
+        }
 
         float spinRate = 0.1f;
         float spinMultiplyer = 20f;
@@ -357,6 +483,11 @@ public class MineMachine : MonoBehaviour
         float dmg = GetMineStrength();
         cell.DealDamage(dmg);
         //Destroy(cell.gameObject);
+    }
+
+    public void DoDeathSequence()
+    {
+        Instantiate(_deathPrefab, transform);
     }
 
     public void SetDirection(MineDirection direction)

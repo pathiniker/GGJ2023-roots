@@ -15,6 +15,9 @@ public class UiController : MonoBehaviour
     [SerializeField] UI_StorageDisplay _storageDisplay;
     [SerializeField] UI_MachineHud _hud;
     [SerializeField] TextMeshProUGUI _depthLevelNameText;
+    [SerializeField] UI_BossFight _bossFight;
+
+    public UI_BossFight BossFight { get { return _bossFight; } }
 
     private void Awake()
     {
@@ -27,6 +30,8 @@ public class UiController : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        _bossFight.gameObject.SetActive(false);
     }
 
     public void SetElevationText(float elevation)
@@ -66,6 +71,17 @@ public class UiController : MonoBehaviour
 
     public void SetDepthLevelName(string levelName)
     {
-        _depthLevelNameText.SetText(levelName);
+        //_depthLevelNameText.SetText(levelName);
+        //_depthLevelNameText.SetText("");
+        _depthLevelNameText.DOKill();
+        _depthLevelNameText.DOText(levelName, 1f, scrambleMode: ScrambleMode.None);
+    }
+
+    public void DoBossFightDisplay()
+    {
+        _depthLevelNameText.SetText("");
+        _coinsText.SetText("");
+        _bossFight.gameObject.SetActive(true);
+        _bossFight.SetHealthValueNormalized(1f);
     }
 }
